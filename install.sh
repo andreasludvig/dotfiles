@@ -10,6 +10,7 @@
 ########
 # nvim #
 ########
+
 mkdir -p "$HOME/.config/nvim"
 mkdir -p "$HOME/.config/nvim/undo_hist" # Create this because its used in the nvim config file
 # Hard links vs symlinks. Hard links alters each other. Altering in one of them affects the othe
@@ -26,10 +27,26 @@ ln -sf  "$HOME/dotfiles/nvim/init.vim" "$HOME/.config/nvim"
 # not exist (which they dont do if we have not created on our new machine/OS etc) we will get an error.
 # So lets create the folders above the symlink
 
+#####
+# X #
+#####
+
 # Now symlink for .Xresources.
 rm -rf "$HOME/.config/X11"
 ln -s "$HOME/dotfiles/X11" "$HOME/.config"
 # Creaete a symlink targeting the whole X11 dir this time, becase everythin in this dir shold be shared between systems. Here, we need to remove the dis manually, if it alreqady exists, for the symlink to be created. For symlinks to FILES that already exist, we can use the -f option, but this does not work for dirs.
+
+#######
+# Zsh #
+#######
+
+# Create Zsh config folder and files and symlink them
+mkdir -p "$HOME/.config/zsh"
+ln -sf "$HOME/dotfiles/zsh/.zshenv" "$HOME"
+ln -sf "$HOME/dotfiles/zsh/.zshrc" "$HOME/.config/zsh"
+ln -sf "$HOME/dotfiles/zsh/aliases" "$HOME/.config/zsh/aliases"
+rm -rf "$HOME/.config/zsh/external"
+ln -sf "$HOME/dotfiles/zsh/external" "$HOME/.config/zsh/"
 
 # Three ways to run our script
 # 1 ./install.sh		The OS will run as a program. The shebang specifies the program to run it.
