@@ -12,3 +12,6 @@ set number
 
 " Copy indent from current line to next
 set autoindent
+set noexpandtab
+set tabstop=4
+set shiftwidth=4

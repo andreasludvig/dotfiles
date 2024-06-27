@@ -7,21 +7,20 @@
 # In arch linux /bin and /sbin are just symlinks pointing to /usr/bin. As a result we can consider every
 # binary to be in /usr/bin.
 
+set -e # Exit immediately if a command exits with a non-zero status
+
 ########
 # nvim #
 ########
 
-mkdir -p "$HOME/.config/nvim"
-mkdir -p "$HOME/.config/nvim/undo_hist" # Create this because its used in the nvim config file
-# Hard links vs symlinks. Hard links alters each other. Altering in one of them affects the othe
-# Symlinks only contains a path to the target file. Alterign teh symlink wont affect the target file. 
-# If the target file is deleted the symlink still exists butdoes point to anything any more.
+mkdir -p "$XDG_CONFIG_HOME/nvim"
+mkdir -p "$XDG_CONFIG_HOME/nvim/undo_hist" # Create this because its used in the nvim config file
 
-ln -sf  "$HOME/dotfiles/nvim/init.vim" "$HOME/.config/nvim"
+ln -sf  "$DOTFILES/nvim/init.vim" "$XDG_CONFIG_HOME/nvim"
 # -s for symlink, and -f for force creation of the link - it removes any existin lnk or file with the
 # same name before creating a new symlink. 
 # ln -s <target> <symlink>. 
-# So for our newly created link: when something looks for $HOME/.config/nvim, redirect to the dotfiles folder
+# So for our newly created link: when something looks for $XDG_CONFIG_HOME/nvim, redirect to the dotfiles folder
 # instead
 # When getting downloading this script from github and running it to recreate our configs, if the dirs does
 # not exist (which they dont do if we have not created on our new machine/OS etc) we will get an error.
@@ -32,21 +31,36 @@ ln -sf  "$HOME/dotfiles/nvim/init.vim" "$HOME/.config/nvim"
 #####
 
 # Now symlink for .Xresources.
-rm -rf "$HOME/.config/X11"
-ln -s "$HOME/dotfiles/X11" "$HOME/.config"
+rm -rf "$XDG_CONFIG_HOME/X11"
+ln -s "$DOTFILES/X11" "$XDG_CONFIG_HOME"
 # Creaete a symlink targeting the whole X11 dir this time, becase everythin in this dir shold be shared between systems. Here, we need to remove the dis manually, if it alreqady exists, for the symlink to be created. For symlinks to FILES that already exist, we can use the -f option, but this does not work for dirs.
+
+######
+# i3 #
+######
+
+rm -rf "$XDG_CONFIG_HOME/i3"
+ln -s "$DOTFILES/i3" "$XDG_CONFIG_HOME"
+
+###########
+# WezTerm #
+###########
+rm -rf "$XDG_CONFIG_HOME/wezterm"
+ln -s "$DOTFILES/wezterm" "$XDG_CONFIG_HOME/wezterm"
 
 #######
 # Zsh #
 #######
 
 # Create Zsh config folder and files and symlink them
-mkdir -p "$HOME/.config/zsh"
-ln -sf "$HOME/dotfiles/zsh/.zshenv" "$HOME"
-ln -sf "$HOME/dotfiles/zsh/.zshrc" "$HOME/.config/zsh"
-ln -sf "$HOME/dotfiles/zsh/aliases" "$HOME/.config/zsh/aliases"
-rm -rf "$HOME/.config/zsh/external"
-ln -sf "$HOME/dotfiles/zsh/external" "$HOME/.config/zsh/"
+mkdir -p "$XDG_CONFIG_HOME/zsh"
+ln -sf "$DOTFILES/zsh/.zshenv" "$HOME"
+ln -sf "$DOTFILES/zsh/.zshrc" "$XDG_CONFIG_HOME/zsh"
+ln -sf "$DOTFILES/zsh/aliases" "$XDG_CONFIG_HOME/zsh/aliases"
+rm -rf "$XDG_CONFIG_HOME/zsh/external"
+ln -sf "$DOTFILES/zsh/external" "$XDG_CONFIG_HOME/zsh/"
+
+
 
 # Three ways to run our script
 # 1 ./install.sh		The OS will run as a program. The shebang specifies the program to run it.

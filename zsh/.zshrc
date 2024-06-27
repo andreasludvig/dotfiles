@@ -81,25 +81,7 @@ else
     echo "fzf is not installed"
 fi
 
-
-# Check if the command `fzf` exists in the system
-if command -v "fzf" >/dev/null 2>&1; then
-    # If `fzf` exists, attempt to source the completion script
-    if ! source /usr/share/fzf/completion.zsh; then
-        # If sourcing `completion.zsh` fails, print an error message
-        echo "Error: completion.zsh not found or failed to source"
-    fi
-    
-    # Attempt to source the key-bindings script
-    if ! source /usr/share/fzf/key-bindings.zsh; then
-        # If sourcing `key-bindings.zsh` fails, print an error message
-        echo "Error: key-bindings.zsh not found or failed to source"
-    fi
-else
-    # If `fzf` is not found, print an error message
-    echo "Error: fzf is not installed"
-fi
-
+echo "Finished FZF setup"
 # Setup fzf searches:
 # Use ripgrep, rg, by default. Search for files, adn hidden files, exclude anu file or directory called .git. 
 export FZF_DEFAULT_COMMAND="rg --files --hidden --glob '!.git'"
@@ -114,10 +96,11 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # Can now also use the rg command instead of grep.
 
 # Launch i3 on startup
-if [ "$(tty) = /dev/tty1" ];
-then
-	pgrep i3 || exec startx "$XDG_CONFIG_HOME/X11/.xinitrc"
+echo "Checking for tty"
+if [ "$(tty)" = "/dev/tty1" ]; then
+    pgrep i3 || exec startx "$XDG_CONFIG_HOME/X11/.xinitrc"
 fi
+echo "Finished checking for tty"
 # pgrep (process grep) allows to fetch a specific process. 
 # If the i3 process does not exist, the exec ... command is done
 # exec replaces the shell rocess (running after logging in) with teh startx process which is tehn replace by i3 due to our .xinitrc file. 
@@ -126,8 +109,8 @@ fi
 	
 
 # Load custom scripts 
-source $DOTFILES/zsh/scripts.sh
-
+source "$DOTFILES/zsh/scripts.sh"
+echo "Sourced custom scripts"
 # ZSH PLUGINS
 # External pieces of configuration we can add to our own. 
 # download and use Zsh additional autocompletion
@@ -138,3 +121,6 @@ source $DOTFILES/zsh/scripts.sh
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # syntax highlighting should be sourced in the script, everything loaded
 # before will tehn be able to use syntax highlighting if needed. 
+echo "Sourced zsh-syntax-highlighting"
+echo "Finished .zshrc"
+
